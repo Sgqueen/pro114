@@ -1,72 +1,50 @@
-Webcam.set({
+lipstickX=0;
+lipstickY=0;
 
-    width:350,
-    height:300,
-    image_format:'png',
-    png_quality:90
-});
 
-camera = document.getElementById("camera");
+function preload(){
 
-Webcam.attach(camera);
+    lipstick = loadImage('https://i.postimg.cc/fT3G8vxv/l1.png')
+}
+      
+function setup() {
+
+    canvas = createCanvas(300,300);
+    canvas.center();
+    video = createCapture(VIDEO);
+    video.size(300,300);
+    video.hide();
+
+    poseNet = ml5.poseNet(video, modelLoaded);
+    poseNet.on('pose', gotPoses);
+}
+
+function modelLoaded() {
+    console.log('PoseNet Is Initialized');
+}
+
+function draw() {
+
+    image(video,0,0,300,300);
+    
+    image(lipstick, lipstickX, lipstickY, 30, 30);
+     
+}
 
 function take_snapshot(){
 
-    Webcam.snap (function(data_uri){
-        document.getElementById("result").innerHTML = '<img id="capture_image" src="'+data_uri+'"/>'
-
-    });
-
-}
-console.log('ml5 version:', ml5.version);
-
-classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/jC3vNTAB8/model.json',modelLoaded);
-
-function modelLoaded(){
-    console.log('Model Loaded!');
-
+    save('Yourfilteredphoto.png');
 }
 
-function speak(){
-
-    var synth =window.speechSynthesis;
-    speak_data_1 = "The first prediction is " + prediction_1;
-    var utterThis = new SpeechSynthesisUtterance(speak_data_1 + speak_data_2);
-    synth.speak(utterThis);
-
-}
-
-
-function check(){
-
-    img = document.getElementById('capture_image');
-    classifier.classify(img, gotResult);
-
-}
-
-function gotResult(error, results){
-
-
-    console.log(error);
-    document.getElementById("result_emotion_name").innerHTML = results[0].label;
-   
-    prediction_1 = results[0].label;
-   
-
-    speak();
-    if(results[0].label=="victory"){
-        document.getElementById("update_emoji").innerHTML = "&#9996;";
-    
+function gotPoses(results)
+{
+    if(results.length > 0){
+        console.log(results);
+        lipstickX = results[0].pose.nose.x-15;
+        lipstickY = results[0].pose.nose.y+15;
+        console.log("lipstick x = " +lipstickX);
+        console.log("lipstick y =" +lipstickY);
+       
+      
     }
-
-    if(results[0].label=="good"){
-        document.getElementById("update_emoji").innerHTML = "&#128077;";
-    
-    }
-
-    if(results[0].label=="awsome"){
-        document.getElementById("update_emoji").innerHTML = "&#128076;";
-    
-    }
-
-  }
+}

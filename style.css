@@ -1,27 +1,20 @@
-body
+h3
 {
-  color: rgb(20, 19, 103);
-  background: #f85898;
+   font-size: 25px !important;
 }
-span
+.btn-success:hover
 {
-  font-size: 50px;
+    background-color:darkmagenta;
 }
-#camera , #result
-{
-  border: 4px dashed rgb(19, 161, 142);
-  width: 350px;
-  height: 300px; 
-}
-#result_emotion_name ,#result_emotion_name2  
-{
-  color: black;
-}
-.emotion_name
-{
-  font-size: 40px;
-}
-.emoji
-{
-  font-size:48px;
-}
+  canvas {
+    animation-name:example;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+
+  @keyframes  example {
+    from {box-shadow : 8px 8px 65px rgb(111, 255, 0);}
+    to {box-shadow : 8px 8px 65px rgb(143, 44, 163);}
+   
+  }
